@@ -28,8 +28,8 @@ public class MultiThreadWordCount6 {
                     for (Map.Entry<String, Integer> entry : words.entrySet()) {
                         result.put(entry.getKey(), result.getOrDefault(entry.getKey(), 0) + entry.getValue());
                     }
-                } catch (Exception ignored) {
-
+                } catch (Exception e) {
+                    System.err.println(e);
                 } finally {
                     lock.unlock();
                     latch.countDown();

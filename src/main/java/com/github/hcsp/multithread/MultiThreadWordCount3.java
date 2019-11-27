@@ -30,8 +30,8 @@ public class MultiThreadWordCount3 {
                 try {
                     lock.lock();
                     result.put(word, result.getOrDefault(word, 0) + 1);
-                } catch (Exception ignored) {
-
+                } catch (RuntimeException e) {
+                    System.err.println(e);
                 } finally {
                     lock.unlock();
                 }

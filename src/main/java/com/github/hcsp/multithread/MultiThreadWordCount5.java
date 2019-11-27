@@ -47,8 +47,8 @@ public class MultiThreadWordCount5 {
             if (size.get() > 0) {
                 finishResult.await();
             }
-        } catch (Exception ignored) {
-
+        } catch (RuntimeException e) {
+            System.err.println(e);
         } finally {
             lock.unlock();
         }

@@ -3,10 +3,7 @@ package com.github.hcsp.multithread;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.*;
 import java.util.stream.Collectors;
 
@@ -16,14 +13,17 @@ public class MultiThreadWordCount2 {
             InterruptedException {
         Map<String, Integer> result = new HashMap<>();
         ExecutorService threadPool = Executors.newFixedThreadPool(threadNum);
+        List<Future<Map<String, Integer>>> listWordCounts = new ArrayList<>();
         for (File file : files) {
             Future<Map<String, Integer>> wordCounts = threadPool.submit(new CountFile(file));
-            Map<String, Integer> single = wordCounts.get();
-            for (Map.Entry<String, Integer> entry : single.entrySet()) {
+            listWordCounts.add(wordCounts);
+        }
+        for (Future<Map<String, Integer>> wordsFuture : listWordCounts) {
+            Map<String, Integer> words = wordsFuture.get();
+            for (Map.Entry<String, Integer> entry : words.entrySet()) {
                 result.put(entry.getKey(), result.getOrDefault(entry.getKey(), 0) + entry.getValue());
             }
         }
-
         return result;
     }
 }
